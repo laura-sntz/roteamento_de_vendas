@@ -1,0 +1,11 @@
+pandas
+numpy
+geopy
+requests
+openrouteservice
+streamlit
+folium
+streamlit-folium
+json
+time
+heapq
