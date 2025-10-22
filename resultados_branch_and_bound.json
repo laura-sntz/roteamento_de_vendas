@@ -1,0 +1,30 @@
+{
+    "rota_otima_indices": [
+        0,
+        5,
+        2,
+        9,
+        8,
+        3,
+        7,
+        1,
+        6,
+        4
+    ],
+    "rota_otima_nomes": [
+        "MANDAGUA\u00c7U",
+        "CORB\u00c9LIA",
+        "BELA VISTA DA CAROBA",
+        "GOIOER\u00ca",
+        "MIRADOR",
+        "MARILENA",
+        "CURITIBA",
+        "S\u00c3O JOS\u00c9 DA BOA VISTA",
+        "TEL\u00caMACO BORBA",
+        "CRUZMALTINA",
+        "MANDAGUA\u00c7U"
+    ],
+    "custo_total_km": 1658.2269999999999,
+    "tempo_execucao_segundos": 175.97204184532166,
+    "nos_expandidos": 530977
+}
