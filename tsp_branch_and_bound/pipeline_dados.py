@@ -56,7 +56,7 @@ def limpar_e_padronizar_dados(caminho_arquivo_csv):
     print(df_final.head())
 
     # Etapa 6: Reduzir quantidade de dados
-    # Como o código deve rodar rapidamente, selecionaremos apenas 20 cidades aleatórias do Paraná
+    # Como o código deve rodar rapidamente, selecionaremos apenas 10 cidades aleatórias do Paraná
     cidades_pr = df_final[df_final['estado'] == 'PARANÁ']
 
     # Verificação para evitar erro de amostra vazia
@@ -64,7 +64,7 @@ def limpar_e_padronizar_dados(caminho_arquivo_csv):
         print("\nAviso: Não há cidades suficientes no Paraná para a amostra de 10. Selecionando todas as disponíveis.")
         cidades_selecionadas = cidades_pr
     else:
-        # Selecionar 20 cidades aleatoriamente para o problema
+        # Selecionar 10 cidades aleatoriamente para o problema
         cidades_selecionadas = cidades_pr.sample(n=10, random_state=42).reset_index(drop=True)
 
     print("\nResumo da amostra selecionada:")
