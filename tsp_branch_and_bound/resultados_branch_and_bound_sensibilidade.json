@@ -4,19 +4,17 @@
         4,
         6,
         1,
-        7,
         2,
         5,
-        9,
+        8,
         3,
-        8
+        7
     ],
     "rota_otima_nomes": [
         "MANDAGUA\u00c7U",
         "CRUZMALTINA",
         "TEL\u00caMACO BORBA",
         "S\u00c3O JOS\u00c9 DA BOA VISTA",
-        "CURITIBA",
         "BELA VISTA DA CAROBA",
         "CORB\u00c9LIA",
         "GOIOER\u00ca",
@@ -24,7 +22,7 @@
         "MIRADOR",
         "MANDAGUA\u00c7U"
     ],
-    "custo_total_km": 1935.4219999999998,
-    "tempo_execucao_segundos": 264.73802757263184,
-    "nos_expandidos": 917207
+    "custo_total_km": 1719.606,
+    "tempo_execucao_segundos": 25.38598370552063,
+    "nos_expandidos": 109217
 }

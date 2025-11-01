@@ -67,7 +67,10 @@ def limpar_e_padronizar_dados(caminho_arquivo_csv):
         # Selecionar 10 cidades aleatoriamente para o problema
         cidades_selecionadas = cidades_pr.sample(n=10, random_state=42).reset_index(drop=True)
 
-    print("\nResumo da amostra selecionada:")
+        # ALTERAÇÃO: Remover "CURITIBA" para o cenário de sensibilidade
+        cidades_selecionadas = cidades_selecionadas[cidades_selecionadas['cidade'] != 'CURITIBA'].reset_index(drop=True)
+
+    print("\nResumo da amostra de sensibilidade (9 cidades):")
     print(cidades_selecionadas)
 
     return cidades_selecionadas
@@ -82,5 +85,5 @@ if __name__ == "__main__":
         print("\nDados prontos para serem usados na modelagem do problema de roteamento.")
 
         # Salva o arquivo
-        dados_cidades.to_csv('pontos_de_visita.csv', index=False)
-        print("\nAmostra de cidades salva em 'pontos_de_visita.csv'.")
+        dados_cidades.to_csv('pontos_de_visita_sensibilidade.csv', index=False)
+        print("\nAmostra de cidades salva em 'pontos_de_visita_sensibilidade.csv'.")
