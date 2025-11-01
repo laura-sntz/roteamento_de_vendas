@@ -6,7 +6,4 @@ openrouteservice
 streamlit
 folium
 streamlit-folium
-json
-time
-heapq
-os
+pytest
