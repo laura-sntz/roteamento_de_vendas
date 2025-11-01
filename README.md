@@ -105,7 +105,7 @@ export ORS_API_KEY="eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImRiY2Mw
 
 _(Nota: `export` define a variável apenas para a sessão atual. Para torná-la permanente, adicione a linha acima ao seu `~/.bashrc` ou `~/.zshrc`)._ _Para testar:_ `echo $ORS_API_KEY`
 
-### 4.3. Execução do Projeto
+### 3.3. Execução do Projeto
 
 Com o ambiente ativado e a chave de API configurada, execute o script principal:
 
