@@ -4,6 +4,13 @@ import json
 import numpy as np
 import time
 import os
+import sys
+
+# Configuração de Paths
+RESULTS_DIR = 'results'
+INPUT_PONTOS_CSV = os.path.join(RESULTS_DIR, 'pontos_de_visita_sensibilidade.csv')
+OUTPUT_MATRIZ_CSV = os.path.join(RESULTS_DIR, 'matriz_distancias_sensibilidade.csv')
+OUTPUT_GEOM_JSON = os.path.join(RESULTS_DIR, 'geometrias_rotas_sensibilidade.json')
 
 def construir_matriz_distancias(pontos_de_visita, api_key):
     """
@@ -75,24 +82,25 @@ def construir_matriz_distancias(pontos_de_visita, api_key):
     return matriz_distancias.astype(float), geometrias_rotas
 
 
+# Execução Principal
 if __name__ == "__main__":
     try:
-        pontos_de_visita = pd.read_csv('pontos_de_visita.csv')
+        pontos_de_visita = pd.read_csv(INPUT_PONTOS_CSV) # Usa path
         api_key = os.getenv("ORS_API_KEY")
-
         if not api_key:
-            raise ValueError(
-                "A variável de ambiente ORS_API_KEY não foi definida. Configure-a antes de executar o script.")
+            print("Erro: A variável de ambiente ORS_API_KEY não foi definida.")
+            sys.exit(1) # Termina o script com erro
 
-        matriz_distancias, geometrias_rotas = construir_matriz_distancias(pontos_de_visita, api_key)
+        matriz_distancias_sensibilidade, geometrias_rotas_sensibilidade = construir_matriz_distancias(pontos_de_visita, api_key)
 
-        matriz_distancias.to_csv('matriz_distancias.csv')
-        print("Matriz de distâncias salva como 'matriz_distancias.csv'.")
+        matriz_distancias_sensibilidade.to_csv(OUTPUT_MATRIZ_CSV) # Usa path
+        print(f"Matriz de distâncias salva como '{OUTPUT_MATRIZ_CSV}'.")
 
-        with open('geometrias_rotas.json', 'w') as f:
-            json.dump(geometrias_rotas, f, indent=4)
-        print("Geometrias das rotas salvas em 'geometrias_rotas.json'.")
+        with open(OUTPUT_GEOM_JSON, 'w') as f: # Usa path
+            json.dump(geometrias_rotas_sensibilidade, f, indent=4)
+        print(f"Geometrias das rotas salvas em '{OUTPUT_GEOM_JSON}'.")
 
     except FileNotFoundError:
-        print("Erro: O arquivo 'pontos_de_visita.csv' não foi encontrado.")
-        print("Execute o 'pipeline_dados.py' primeiro para gerar a amostra de cidades.")
+        print(f"Erro: O arquivo '{INPUT_PONTOS_CSV}' não foi encontrado.")
+        print("Execute o 'pipeline_dados_sensibilidade.py' primeiro.")
+        sys.exit(1) # Termina o script com erro

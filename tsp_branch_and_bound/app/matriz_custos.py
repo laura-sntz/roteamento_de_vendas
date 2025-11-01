@@ -4,6 +4,14 @@ import json
 import numpy as np
 import time
 import os
+import sys
+
+# Configuração de Paths
+RESULTS_DIR = 'results'
+INPUT_PONTOS_CSV = os.path.join(RESULTS_DIR, 'pontos_de_visita.csv')
+OUTPUT_MATRIZ_CSV = os.path.join(RESULTS_DIR, 'matriz_distancias.csv')
+OUTPUT_GEOM_JSON = os.path.join(RESULTS_DIR, 'geometrias_rotas.json')
+
 
 def construir_matriz_distancias(pontos_de_visita, api_key):
     """
@@ -50,14 +58,16 @@ def construir_matriz_distancias(pontos_de_visita, api_key):
                     matriz_distancias.iloc[i, j] = distancia
                     geometrias_rotas[chave_rota] = geometria_codificada
 
-                    print(f"[{i+1}/{n}] {pontos_de_visita.iloc[i]['cidade']} → {pontos_de_visita.iloc[j]['cidade']}: {distancia:.2f} km")
+                    print(
+                        f"[{i + 1}/{n}] {pontos_de_visita.iloc[i]['cidade']} → {pontos_de_visita.iloc[j]['cidade']}: {distancia:.2f} km")
 
                     time.sleep(1.6)
                     break
 
                 except requests.exceptions.HTTPError as e:
                     if response.status_code == 429:
-                        print(f"Erro 429 (Limite da API). Tentativa {tentativa + 1}/{max_tentativas}. Esperando 60 segundos...")
+                        print(
+                            f"Erro 429 (Limite da API). Tentativa {tentativa + 1}/{max_tentativas}. Esperando 60 segundos...")
                         time.sleep(60)
                     else:
                         print(f"Erro HTTP na rota {chave_rota}: {e}")
@@ -70,29 +80,38 @@ def construir_matriz_distancias(pontos_de_visita, api_key):
                     matriz_distancias.iloc[i, j] = np.nan
                     geometrias_rotas[chave_rota] = None
                     break
+            else:
+                print(
+                    f"Falha ao obter dados para a rota {chave_rota} após {max_tentativas} tentativas. Marcando como NaN.")
+                matriz_distancias.iloc[i, j] = np.nan
+                geometrias_rotas[chave_rota] = None
 
     print("\nMatriz de distâncias e geometrias concluídas!")
     return matriz_distancias.astype(float), geometrias_rotas
 
 
+# Execução Principal
 if __name__ == "__main__":
     try:
-        pontos_de_visita = pd.read_csv('pontos_de_visita_sensibilidade.csv')
+        pontos_de_visita = pd.read_csv(INPUT_PONTOS_CSV)  # Usa path da raiz
+
+        # Usa variável de ambiente para a chave
         api_key = os.getenv("ORS_API_KEY")
-
         if not api_key:
-            raise ValueError(
-                "A variável de ambiente ORS_API_KEY não foi definida. Configure-a antes de executar o script.")
+            print("Erro: A variável de ambiente ORS_API_KEY não foi definida.")
+            print("Configure-a antes de executar o script (ex: set ORS_API_KEY=sua_chave).")
+            sys.exit(1)  # Termina o script com erro
 
-        matriz_distancias_sensibilidade, geometrias_rotas_sensibilidade = construir_matriz_distancias(pontos_de_visita, api_key)
+        matriz_distancias, geometrias_rotas = construir_matriz_distancias(pontos_de_visita, api_key)
 
-        matriz_distancias_sensibilidade.to_csv('matriz_distancias_sensibilidade.csv')
-        print("Matriz de distâncias salva como 'matriz_distancias_sensibilidade.csv'.")
+        matriz_distancias.to_csv(OUTPUT_MATRIZ_CSV)  # Usa path da raiz
+        print(f"Matriz de distâncias salva como '{OUTPUT_MATRIZ_CSV}'.")
 
-        with open('geometrias_rotas_sensibilidade.json', 'w') as f:
-            json.dump(geometrias_rotas_sensibilidade, f, indent=4)
-        print("Geometrias das rotas salvas em 'geometrias_rotas_sensibilidade.json'.")
+        with open(OUTPUT_GEOM_JSON, 'w') as f:  # Usa path da raiz
+            json.dump(geometrias_rotas, f, indent=4)
+        print(f"Geometrias das rotas salvas em '{OUTPUT_GEOM_JSON}'.")
 
     except FileNotFoundError:
-        print("Erro: O arquivo 'pontos_de_visita_sensibilidade.csv' não foi encontrado.")
-        print("Execute o 'pipeline_dados_sensibilidade.py' primeiro para gerar a amostra de cidades.")
+        print(f"Erro: O arquivo '{INPUT_PONTOS_CSV}' não foi encontrado.")
+        print("Execute o 'pipeline_dados.py' primeiro para gerar a amostra de cidades.")
+        sys.exit(1) # Termina o script com erro
