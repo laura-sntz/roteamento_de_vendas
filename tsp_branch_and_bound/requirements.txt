@@ -7,3 +7,6 @@ streamlit
 folium
 streamlit-folium
 pytest
+pandas
+maplotlib
+seaborn
