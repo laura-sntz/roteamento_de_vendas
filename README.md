@@ -143,7 +143,7 @@ O projeto inclui arquivos complementares para a documentação e análise financ
 O projeto está organizado da seguinte forma:
 
 ```
-roteamento_vendas/
+tsp_branch_and_bound/
 ├── app/                  # Contém a lógica principal da aplicação
 │   ├── pipeline_dados.py
 │   ├── matriz_custos.py
