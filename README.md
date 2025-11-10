@@ -1,5 +1,4 @@
-﻿
-# Projeto PO: Otimização de Rotas de Vendas (Branch and Bound)
+﻿# Projeto PO: Otimização de Rotas de Vendas (Branch and Bound)
 
 Este projeto foi desenvolvido para a disciplina de Pesquisa Operacional. O objetivo é criar um sistema completo em Python que resolve um problema de otimização combinatória (o Problema do Caixeiro Viajante - TSP) usando o algoritmo **Branch and Bound**.
 
@@ -7,35 +6,24 @@ O sistema utiliza um dataset real de cidades brasileiras, calcula as distâncias
 
 ## 1. Fonte de Dados e Pré-processamento
 
--   **Fonte:** Kaggle
-    
--   **Nome:** Brazilian Cities
-    
--   **Link:** `https://www.kaggle.com/code/rfantinicosta/brazilian-cities-distance-analysis`
-    
--   **Contexto:** O dataset contém informações geográficas (latitude, longitude) de cidades brasileiras. Para este projeto, o script `app/pipeline_dados.py` realiza o seguinte pré-processamento:
-    
+* **Fonte:** Kaggle
+* **Nome:** Brazilian Cities
+* **Link:** `https://www.kaggle.com/datasets/codjust/brazilian-cities` (Nota: O link no README original estava diferente, este é o link correto que usamos).
+* **Contexto:** O dataset (`data/brazilian_cities.csv`) contém informações geográficas de cidades brasileiras. O script `app/pipeline_dados.py` realiza o seguinte pré-processamento:
     1.  **Limpeza:** Remove colunas desnecessárias e linhas com dados de geolocalização ausentes.
-        
-    2.  **Amostragem:** Para garantir que o algoritmo execute em tempo hábil (Critério de Desempenho), foi selecionada uma amostra aleatória de **10 cidades** do estado do **Paraná**.
-        
+    2.  **Amostragem:** Para garantir que o algoritmo execute em tempo hábil, foi selecionada uma amostra aleatória de **10 cidades** do estado do **Paraná**.
     3.  **Reprodutibilidade:** Foi usado `random_state=42` na amostragem para garantir que os resultados (a rota ótima, o custo, etc.) sejam sempre os mesmos a cada execução.
-        
     4.  **Matriz de Custos:** A distância em linha reta (Haversine) foi descartada. O script `app/matriz_custos.py` consome a API do OpenRouteService para gerar uma matriz de custos com as **distâncias reais de rodovia** e o **traçado geométrico** de cada rota.
-        
 
 ## 2. Tecnologias e Bibliotecas
 
 O projeto utiliza as bibliotecas externas listadas no `requirements.txt`. As principais são:
 
--   **`pandas`** e **`numpy`:** Para manipulação e processamento de dados.
-    
--   **`requests`:** Para consumo da API de roteamento.
-    
--   **`streamlit`** e **`folium`:** Para a criação do dashboard interativo e dos mapas.
-    
--   **`pytest`:** Para a execução dos testes unitários.
-    
+* **`pandas`** e **`numpy`:** Para manipulação e processamento de dados.
+* **`requests`:** Para consumo da API de roteamento.
+* **`streamlit`**, **`folium`** e **`streamlit-folium`:** Para a criação do dashboard interativo e dos mapas.
+* **`matplotlib`** e **`seaborn`:** Para a geração dos gráficos estáticos do relatório de EDA.
+* **`pytest`:** Para a execução dos testes unitários.
 
 ## 3. Como Executar o Projeto
 
@@ -44,18 +32,12 @@ Este projeto é centralizado pelo `main.py`, que oferece um menu interativo para
 ### 3.1. Configuração Inicial (Setup)
 
 1.  **Clone o repositório:**
-    
-    
-    ```
-    git clone https://github.com/laura-sntz/roteamento_de_vendas
+    ```bash
+    git clone [https://github.com/laura-sntz/roteamento_de_vendas](https://github.com/laura-sntz/roteamento_de_vendas)
     cd roteamento_vendas
-    
     ```
-    
-2.  **Crie e ative o ambiente virtual:** (Altamente recomendado, especialmente se o caminho do projeto tiver acentos ou caracteres especiais)
-    
-    
-    ```
+2.  **Crie e ative o ambiente virtual:** (Altamente recomendado)
+    ```bash
     python -m venv .venv
     
     # No Windows
@@ -63,55 +45,44 @@ Este projeto é centralizado pelo `main.py`, que oferece um menu interativo para
     
     # No Linux / macOS
     source .venv/bin/activate
-    
     ```
-    
 3.  **Instale as dependências:**
-    
-    
-    ```
+    ```bash
     pip install -r requirements.txt
-    
     ```
-    
 
 ### 3.2. Configuração da Chave de API (Obrigatório)
 
-Os scripts `matriz_custos.py` e `matriz_custos_sensibilidade.py` requerem uma chave de API do **OpenRouteService (ORS)**. Para fins de segurança e boas práticas, o código está configurado para ler esta chave de uma **variável de ambiente** chamada `ORS_API_KEY`.
+Os scripts `matriz_custos.py` e `matriz_custos_sensibilidade.py` requerem uma chave de API do **OpenRouteService (ORS)**. O código está configurado para ler esta chave de uma **variável de ambiente** chamada `ORS_API_KEY`.
 
 > **Nota:** Para facilitar a correção deste projeto, estamos expondo a chave utilizada. Em um ambiente de produção, esta chave jamais deve ser exposta publicamente.
 
--   **Chave Utilizada:** `eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImRiY2MwMzI2NzM2MTQwM2VhZmZkMDdiNmZmN2EwOTQxIiwiaCI6Im11cm11cjY0In0=`
-    
+* **Chave Utilizada:** `eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImRiY2MwMzI2NzM2MTQwM2VhZmZkMDdiNmZmN2EwOTQxIiwiaCI6Im11cm11cjY0In0=`
 
 **Como configurar a variável de ambiente no seu sistema:**
 
-**🪟 Windows (Prompt de Comando ou PowerShell)** _Execute o comando abaixo no terminal. Após executar, feche e reabra o terminal para que a variável seja carregada._
-
-```
+**🪟 Windows (Prompt de Comando ou PowerShell)**
+*Execute o comando abaixo no terminal. Após executar, feche e reabra o terminal para que a variável seja carregada.*
+```bash
 setx ORS_API_KEY "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImRiY2MwMzI2NzM2MTQwM2VhZmZkMDdiNmZmN2EwOTQxIiwiaCI6Im11cm11cjY0In0="
-
 ```
 
 _Para testar se funcionou (em um novo terminal):_ `echo %ORS_API_KEY%`
 
 **🧑‍💻 Linux / macOS (terminal bash ou zsh)** _Execute no terminal:_
 
-
 ```
 export ORS_API_KEY="eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImRiY2MwMzI2NzM2MTQwM2VhZmZkMDdiNmZmN2EwOTQxIiwiaCI6Im11cm11cjY0In0="
-
 ```
 
 _(Nota: `export` define a variável apenas para a sessão atual. Para torná-la permanente, adicione a linha acima ao seu `~/.bashrc` ou `~/.zshrc`)._ _Para testar:_ `echo $ORS_API_KEY`
 
-### 4.3. Execução do Projeto
+### 3.3. Execução do Projeto
 
 Com o ambiente ativado e a chave de API configurada, execute o script principal:
 
 ```
 python main.py
-
 ```
 
 O script apresentará o seguinte menu:
@@ -122,15 +93,24 @@ O script apresentará o seguinte menu:
 2. [Iniciar] Dashboard Streamlit (Visualização)
 3. [Rodar] Testes Unitários
 4. [Sair]
-
 ```
 
--   **Opção 1:** Executa todos os scripts de processamento (`pipeline_dados.py`, `matriz_custos.py`, `branch_e_bound.py`) e também os scripts do cenário de sensibilidade. **(Necessário executar se a pasta _results_ estiver vazia).**
+-   **Opção 1:** Executa todos os scripts de processamento (`app/pipeline_dados.py`, `app/matriz_custos.py`, `app/branch_e_bound.py`) e também os scripts do cenário de sensibilidade. **(Necessário executar se a pasta `results/` estiver vazia).**
     
--   **Opção 2:** Inicia o Dashboard Streamlit (`analise_dados.py`). Requer que a Opção 1 já tenha sido executada.
+-   **Opção 2:** Inicia o Dashboard Streamlit (`app/analise_dados.py`). Requer que a Opção 1 já tenha sido executada.
     
--   **Opção 3:** Roda os testes unitários (`pytest`) para validar a função `calcular_lower_bound`.
+-   **Opção 3:** Roda os testes unitários (`pytest tests/`) para validar a função `calcular_lower_bound`.
     
+
+### 3.4. Gerando Gráficos para o Relatório (Opcional)
+
+O projeto inclui um script separado para gerar os gráficos estáticos (Matplotlib/Seaborn) usados no relatório final de EDA, conforme solicitado no item 1.4 do PDF de requisitos.
+
+```
+python relatorio/visualizacoes_relatorio.py
+```
+
+_Este script salvará os arquivos `.png` dentro da pasta `relatorio/relatorio_imagens/`._
 
 ## 4. Estrutura de Pastas
 
@@ -159,13 +139,19 @@ roteamento_vendas/
 │   ├── resultados_branch_and_bound.json
 │   └── ... (e os arquivos _sensibilidade)
 │
+├── relatorio/              # Contém o script e os gráficos para o relatório de EDA
+│   ├── visualizacoes_relatorio.py
+│   ├── Relatorio_Final.pdf (Exemplo)
+│   └── relatorio_imagens/
+│       ├── dispersao_10_cidades.png
+│       └── ... (demais graficos .png)
+│
 ├── tests/                  # Testes unitários do projeto
 │   └── test_algoritmos.py
 │
 ├── .gitignore
 ├── main.py                 # Script principal que centraliza a execução
 └── requirements.txt
-
 ```
 
 ## 5. Autores
